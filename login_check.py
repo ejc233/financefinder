@@ -21,6 +21,9 @@ def main():
 
 
 # checks whether customer information is correct
+#
+# returns 0 and error message if customer information incorrect
+# returns 1 and correct message if customer information correct
 def checkname(customerId, firstName, lastName, zipcode):
 	url = 'http://api.reimaginebanking.com/customers/{}?key={}'.format(customerId, apiKey)
 
@@ -47,6 +50,9 @@ def checkname(customerId, firstName, lastName, zipcode):
 
 
 # get the accounts associated with a specific customer id
+#
+# returns a list of tuples, where each tuple represents an account and contains 
+# that account's id, nickname, rewards, type, and balance
 def getaccounts(customerId):
 	url = 'http://api.reimaginebanking.com/customers/{}/accounts?key={}'.format(customerId, apiKey)
 
@@ -64,6 +70,9 @@ def getaccounts(customerId):
 
 
 # get the deposits associated with a specific account id
+#
+# returns a list of tuples, where each tuple represents a deposit and contains 
+# that deposit's id, date made (as a datetime), status, and amount
 def getdeposits(accountId):
 	url = 'http://api.reimaginebanking.com/accounts/{}/deposits?key={}'.format(accountId, apiKey)
 
@@ -82,6 +91,10 @@ def getdeposits(accountId):
 
 
 # get the withdrawals associated with a specific account id
+#
+# returns a list of tuples, where each tuple represents a withdrawal and contains 
+# that withdrawal's id, date made (as a datetime), status, and amount
+
 def getwithdrawals(accountId):
 	url = 'http://api.reimaginebanking.com/accounts/{}/withdrawals?key={}'.format(accountId, apiKey)
 
@@ -100,7 +113,10 @@ def getwithdrawals(accountId):
 
 
 # get the average intake per transaction in a certain amount of time
-def getAverageIntakeSingleAccountPastDays(accountId, numDays):
+#
+# returns the total intake from summing the deposits for an account in a certain
+# window range divided by the number of deposits made in that time
+def getAverageIntakeSingleAccountPastDays(accountId, startDay, windowSize):
 
 	intake = 0.0
 	count = 0.0
@@ -108,18 +124,22 @@ def getAverageIntakeSingleAccountPastDays(accountId, numDays):
 	adeposits = getdeposits(accountId)
 	sorted(adeposits, key=lambda x: x[1], reverse=True)
 	for deposit in adeposits:
-		# if date is less than numDays days before current day
-		if datetime.datetime.now() - timedelta(days=numDays) <= deposit[1]:
+		# if date is less than windowSize days before current day
+		if startDay - timedelta(days=windowSize) <= deposit[1] && deposit[1] <= startDay:
 			intake += deposit[3]
 			count += 1
-		elif:
-			break
+
+	if outflow == 0.0:
+		return 0.0
 
 	return intake / count
 
 
 # get the average outflow per transaction and day of week
-def getAverageOutflowSingleAccountPastDays(accountId, numDays):
+#
+# returns the total outflow from summing the withdrawals for an account in a
+# certain window range divided by the number of withdrawals made in that time
+def getAverageOutflowSingleAccountPastDays(accountId, startDay, windowSize):
 
 	outflow = 0.0
 	count = 0.0
@@ -127,58 +147,81 @@ def getAverageOutflowSingleAccountPastDays(accountId, numDays):
 	awithdrawals = getwithdrawals(accountId)
 	sorted(awithdrawals, key=lambda x: x[1], reverse=True)
 	for withdrawal in awithdrawals:
-		# if date is less than numDays days before current day
-		if datetime.datetime.now() - timedelta(days=numDays) <= withdrawal[1]:
+		# if date is less than windowSize days before current day
+		if startDay - timedelta(days=windowSize) <= withdrawal[1] && withdrawal[1] <= startDay:
 			outflow += withdrawal[3]
 			count += 1
-		elif:
-			break
 	
+	if outflow == 0.0:
+		return 0.0
+
 	return outflow / count
 
 
 # get the average of total income for weeks, hours, days
-def getAverageIncomeSingleAccountPastDays(accountId, numDays):
+#
+# returns the average income in a certain window range by taking the average
+# intake and subtracting the average outflow
+def getAverageIncomeSingleAccountPastDays(accountId, startDay, windowSize):
 
-	return getAverageIntakeSingleAccountPastDays(accountId, numDays) - getAverageOutflowSingleAccountPastDays(accountId, numDays)
+	return getAverageIntakeSingleAccountPastDays(accountId, startDay, windowSize) - getAverageOutflowSingleAccountPastDays(accountId, startDay, windowSize)
 
 
-# get the average intake per transaction for dayRange/2 days before and after middleDay
-def getAverageIntakeSingleAccountRange(accountId, middleDay, dayRange):
+# get the list of numDays-day intake averages starting from startDay and going
+# numDays back
+#
+# windowSize is the number of days the average is taken over
+# numDays represents how many days the graph diplays the results
+#
+# returns a list of (x,y) tuples where x represents a day before or at startDay,
+# while y represents the intake average on that day
+def getAverageIntakeSingleAccountPastRange(accountId, startDay, windowSize, numDays):
 
-	intake = 0.0
-	count = 0.0
-
-	for deposits in getdeposits(accountId):
-		# if date is less than numDays days before current day
-		if middleDay - dayRange / 2 <= deposit[1] && middleDay + dayRange / 2 >= deposit[1]:
-			intake += deposit[3]
-			count += 1
+	avgintakes = []
+	for i in range(0, numDays):
+		newDay = startDay - timedelta(days=i)
+		intaketuple = (newDay, getAverageIntakeSingleAccountPastDays(accountId, newDay, windowSize))
+		avgintakes.append(intaketuple)
 	
-	return intake / count
+	return avgintakes
 
 
-# get the average outflow per transaction for dayRange/2 days before and after middleDay
-def getAverageOutflowSingleAccountRange(accountId, middleDay, dayRange):
+# get the list of numDays-day outflow averages starting from startDay and going
+# numDays back
+#
+# windowSize is the number of days the average is taken over
+# numDays represents how many days the graph diplays the results
+#
+# returns a list of (x,y) tuples where x represents a day before or at startDay,
+# while y represents the outflowaverage on that day
+def getAverageOutflowSingleAccountPastRange(accountId, startDay, windowSize, numDays):
 
-	outflow = 0.0
-	count = 0.0
-
-	for withdrawal in getwithdrawals(accountId):
-		# if date is less than numDays days before current day
-		if middleDay - dayRange / 2 <= withdrawal[1] && middleDay + dayRange / 2 >= withdrawal[1]:
-			outflow += withdrawal[3]
-			count += 1
+	avgoutflows = []
+	for i in range(0, numDays):
+		newDay = startDay - timedelta(days=i)
+		outflowtuple = (newDay, getAverageOutflowSingleAccountPastDays(accountId, newDay, windowSize))
+		avgoutflows.append(outflowtuple)
 	
-	return outflow / count
+	return avgoutflows
 
 
-# get the average intake per transaction for dayRange/2 days before and after middleDay
-def getAverageIncomeSingleAccountRange(accountId, middleDay, numDays):
+# get the list of numDays-day income averages starting from startDay and going
+# numDays back
+#
+# windowSize is the number of days the average is taken over
+# numDays represents how many days the graph diplays the results
+#
+# returns a list of (x,y) tuples where x represents a day before or at startDay,
+# while y represents the incomeaverage on that day
+def getAverageIncomeSingleAccountPastRange(accountId, startDay, windowSize, numDays):
 
-	return getAverageIntakeSingleAccountRange(accountId, middleDay, numDays) - getAverageOutflowSingleAccountRange(accountId, middleDay, numDays)
-
-
+	avgincomes = []
+	for i in range(0, numDays):
+		newDay = startDay - timedelta(days=i)
+		incometuple = (newDay, getAverageIncomeSingleAccountPastDays(accountId, newDay, windowSize))
+		avgincomes.append(incometuple)
+	
+	return avgincomes
 
 
 if __name__ == '__main__':
