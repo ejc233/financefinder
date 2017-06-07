@@ -3,6 +3,7 @@
 
 import requests
 import json
+import datetime
 
 apiKey = '0e5699be695712bf95845e1388604fd4'
 
@@ -41,6 +42,8 @@ def main():
 	print getdeposits(aid)
 	print getwithdrawals(aid)
 
+
+# checks whether customer information is correct
 def checkname(customerId, firstName, lastName, zipcode):
 	url = 'http://api.reimaginebanking.com/customers/{}?key={}'.format(customerId, apiKey)
 
@@ -69,6 +72,7 @@ def checkname(customerId, firstName, lastName, zipcode):
 	return 0, 'Customer information is correct'
 
 
+# get the accounts associated with a specific customer id
 def getaccounts(customerId):
 	url = 'http://api.reimaginebanking.com/customers/{}/accounts?key={}'.format(customerId, apiKey)
 
@@ -86,6 +90,7 @@ def getaccounts(customerId):
 	return raccounts
 
 
+# get the deposits associated with a specific customer id
 def getdeposits(accountId):
 	url = 'http://api.reimaginebanking.com/accounts/{}/deposits?key={}'.format(accountId, apiKey)
 
@@ -97,7 +102,8 @@ def getdeposits(accountId):
 
 	rdeposits = []
 	for deposit in rj:
-		dtuple = (deposit['_id'], deposit['transaction_date'], deposit['status'], deposit['amount'])
+		dtransactiondate = datetime.strptime(deposit['transaction_date'], '%Y-%m-%d')
+		dtuple = (deposit['_id'], dtransactiondate, deposit['status'], deposit['amount'])
 		rdeposits.append(dtuple)
 	
 	return rdeposits
@@ -114,7 +120,8 @@ def getwithdrawals(accountId):
 
 	rwithdrawals = []
 	for withdrawal in rj:
-		wtuple = (withdrawal['_id'], withdrawal['transaction_date'], withdrawal['status'], withdrawal['amount'])
+		wtransactiondate = datetime.strptime(withdrawal['transaction_date'], '%Y-%m-%d')
+		wtuple = (withdrawal['_id'], wtransactiondate, withdrawal['status'], withdrawal['amount'])
 		rwithdrawals.append(wtuple)
 	
 	return rwithdrawals
