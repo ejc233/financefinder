@@ -34,9 +34,11 @@ def main():
 	first = 'Gerda'
 	last = 'Gottlieb'
 	zipcode = '23881'
+	aid = '59382b21ceb8abe24250e1a2'
 		
 	print checkname(cid, first, last, zipcode)
-	print getaccountids(cid)
+	print getaccounts(cid)
+	print getdeposits(aid)
 
 def checkname(customerId, firstName, lastName, zipcode):
 	url = 'http://api.reimaginebanking.com/customers/{}?key={}'.format(customerId, apiKey)
@@ -66,7 +68,7 @@ def checkname(customerId, firstName, lastName, zipcode):
 	return 0, 'Customer information is correct'
 
 
-def getaccountids(customerId):
+def getaccounts(customerId):
 	url = 'http://api.reimaginebanking.com/customers/{}/accounts?key={}'.format(customerId, apiKey)
 
 
@@ -81,7 +83,23 @@ def getaccountids(customerId):
 		raccounts.append(atuple)
 	
 	return raccounts
-		
+
+
+def getdeposits(accountId):
+	url = 'http://api.reimaginebanking.com/accounts/{}/deposits?key={}'.format(accountId, apiKey)
+
+
+	# Query For Response
+	response = requests.get(url)
+	
+	rj = response.json()
+
+	rdeposits = []
+	for deposit in rj:
+		dtuple = (deposit['_id'], deposit['transaction_date'], deposit['status'], deposit['amount'])
+		rdeposits.append(dtuple)
+	
+	return rdeposits
 
 if __name__ == '__main__':
 	main()
