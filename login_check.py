@@ -26,6 +26,12 @@ def main():
 	print getAverageIntakeSingleAccountPastRange(aidc, datetime(2017, 6, 1, 0, 0), 7, 30)
 	print getAverageOutflowSingleAccountPastRange(aidc, datetime(2017, 6, 1, 0, 0), 7, 30)
 	print getAverageIncomeSingleAccountPastRange(aidc, datetime(2017, 6, 1, 0, 0), 7, 30)
+	print getAverageIntakeSingleAccountPastDays(aids, datetime(2017, 6, 1, 0, 0), 7)
+	print getAverageOutflowSingleAccountPastDays(aids, datetime(2017, 6, 1, 0, 0), 7)
+	print getAverageIncomeSingleAccountPastDays(aids, datetime(2017, 6, 1, 0, 0), 7)
+	print getAverageIntakeSingleAccountPastRange(aids, datetime(2017, 6, 1, 0, 0), 7, 30)
+	print getAverageOutflowSingleAccountPastRange(aids, datetime(2017, 6, 1, 0, 0), 7, 30)
+	print getAverageIncomeSingleAccountPastRange(aids, datetime(2017, 6, 1, 0, 0), 7, 30)
 
 
 # checks whether customer information is correct
