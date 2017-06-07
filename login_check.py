@@ -39,6 +39,7 @@ def main():
 	print checkname(cid, first, last, zipcode)
 	print getaccounts(cid)
 	print getdeposits(aid)
+	print getwithdrawals(aid)
 
 def checkname(customerId, firstName, lastName, zipcode):
 	url = 'http://api.reimaginebanking.com/customers/{}?key={}'.format(customerId, apiKey)
@@ -100,6 +101,24 @@ def getdeposits(accountId):
 		rdeposits.append(dtuple)
 	
 	return rdeposits
+
+
+def getwithdrawals(accountId):
+	url = 'http://api.reimaginebanking.com/accounts/{}/withdrawals?key={}'.format(accountId, apiKey)
+
+
+	# Query For Response
+	response = requests.get(url)
+	
+	rj = response.json()
+
+	rwithdrawals = []
+	for withdrawal in rj:
+		wtuple = (withdrawal['_id'], withdrawal['transaction_date'], withdrawal['status'], withdrawal['amount'])
+		rwithdrawals.append(wtuple)
+	
+	return rwithdrawals
+
 
 if __name__ == '__main__':
 	main()
