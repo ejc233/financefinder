@@ -4,20 +4,28 @@
 import requests
 import json
 import datetime
+from datetime import datetime, timedelta
 
 apiKey = '0e5699be695712bf95845e1388604fd4'
 	
 def main():
-	cid = '593812c2a73e4942cdafd74f'
-	first = 'Gerda'
-	last = 'Gottlieb'
-	zipcode = '23881'
-	aid = '59382b21ceb8abe24250e1a2'
+	cid = '593854d8ceb8abe2425176c3'
+	first = 'Sherlock'
+	last = 'Holmes'
+	zipcode = '11111'
+	aidc = '593854d8ceb8abe2425176c4'
+	aids = '593854d8ceb8abe2425176c5'
 		
 	print checkname(cid, first, last, zipcode)
-	print getaccounts(cid)
-	print getdeposits(aid)
-	print getwithdrawals(aid)
+	# print getaccounts(cid)
+	# print getdeposits(aidc)
+	# print getwithdrawals(aidc)
+	print getAverageIntakeSingleAccountPastDays(aidc, datetime(2017, 6, 1, 0, 0), 7)
+	print getAverageOutflowSingleAccountPastDays(aidc, datetime(2017, 6, 1, 0, 0), 7)
+	print getAverageIncomeSingleAccountPastDays(aidc, datetime(2017, 6, 1, 0, 0), 7)
+	print getAverageIntakeSingleAccountPastRange(aidc, datetime(2017, 6, 1, 0, 0), 7, 30)
+	print getAverageOutflowSingleAccountPastRange(aidc, datetime(2017, 6, 1, 0, 0), 7, 30)
+	print getAverageIncomeSingleAccountPastRange(aidc, datetime(2017, 6, 1, 0, 0), 7, 30)
 
 
 # checks whether customer information is correct
@@ -40,11 +48,11 @@ def checkname(customerId, firstName, lastName, zipcode):
 	rzip = rj['address']['zip']
 	
 	if rfirst.lower().strip() != firstName.lower().strip():
-		return 0, 'Customer Information not correct'
+		return 0, 'Customer Information not correct1'
 	elif rlast.lower().strip() != lastName.lower().strip():
-		return 0, 'Customer Information not correct'
+		return 0, 'Customer Information not correct2'
 	elif rzip != zipcode:
-		return 0, 'Customer Information not correct'
+		return 0, 'Customer Information not correct3'
 	
 	return 1, 'Customer information is correct'
 
@@ -125,11 +133,11 @@ def getAverageIntakeSingleAccountPastDays(accountId, startDay, windowSize):
 	sorted(adeposits, key=lambda x: x[1], reverse=True)
 	for deposit in adeposits:
 		# if date is less than windowSize days before current day
-		if startDay - timedelta(days=windowSize) <= deposit[1] && deposit[1] <= startDay:
+		if startDay - timedelta(days=windowSize) <= deposit[1] and deposit[1] <= startDay:
 			intake += deposit[3]
 			count += 1
 
-	if outflow == 0.0:
+	if intake == 0.0:
 		return 0.0
 
 	return intake / count
@@ -148,7 +156,7 @@ def getAverageOutflowSingleAccountPastDays(accountId, startDay, windowSize):
 	sorted(awithdrawals, key=lambda x: x[1], reverse=True)
 	for withdrawal in awithdrawals:
 		# if date is less than windowSize days before current day
-		if startDay - timedelta(days=windowSize) <= withdrawal[1] && withdrawal[1] <= startDay:
+		if startDay - timedelta(days=windowSize) <= withdrawal[1] and withdrawal[1] <= startDay:
 			outflow += withdrawal[3]
 			count += 1
 	
@@ -178,7 +186,7 @@ def getAverageIncomeSingleAccountPastDays(accountId, startDay, windowSize):
 def getAverageIntakeSingleAccountPastRange(accountId, startDay, windowSize, numDays):
 
 	avgintakes = []
-	for i in range(0, numDays):
+	for i in range(numDays - 1, -1, -1):
 		newDay = startDay - timedelta(days=i)
 		intaketuple = (newDay, getAverageIntakeSingleAccountPastDays(accountId, newDay, windowSize))
 		avgintakes.append(intaketuple)
@@ -197,7 +205,7 @@ def getAverageIntakeSingleAccountPastRange(accountId, startDay, windowSize, numD
 def getAverageOutflowSingleAccountPastRange(accountId, startDay, windowSize, numDays):
 
 	avgoutflows = []
-	for i in range(0, numDays):
+	for i in range(numDays - 1, -1, -1):
 		newDay = startDay - timedelta(days=i)
 		outflowtuple = (newDay, getAverageOutflowSingleAccountPastDays(accountId, newDay, windowSize))
 		avgoutflows.append(outflowtuple)
@@ -216,7 +224,7 @@ def getAverageOutflowSingleAccountPastRange(accountId, startDay, windowSize, num
 def getAverageIncomeSingleAccountPastRange(accountId, startDay, windowSize, numDays):
 
 	avgincomes = []
-	for i in range(0, numDays):
+	for i in range(numDays - 1, -1, -1):
 		newDay = startDay - timedelta(days=i)
 		incometuple = (newDay, getAverageIncomeSingleAccountPastDays(accountId, newDay, windowSize))
 		avgincomes.append(incometuple)
