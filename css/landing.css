@@ -2734,7 +2734,7 @@
 	}
 
 /* Table */
-/*
+
 	.table-wrapper {
 		-webkit-overflow-scrolling: touch;
 		overflow-x: auto;
@@ -2821,7 +2821,7 @@
 	}
 
 /* Features */
-/*
+
 	.features {
 		display: -moz-flex;
 		display: -webkit-flex;
@@ -2888,7 +2888,7 @@
 		}
 
 /* Statistics */
-/*
+
 	.statistics {
 		display: -moz-flex;
 		display: -webkit-flex;
@@ -2997,7 +2997,7 @@
 		}
 
 /* Spotlight */
-/*
+
 	.spotlight {
 		display: -moz-flex;
 		display: -webkit-flex;
@@ -3099,7 +3099,7 @@
 		#background {
 			margin: 1em 0 2em 0;
 			background-color: #AAAAAA;
-			border-radius: 25px
+			border-radius: 10px
 		}
 
 		#header h1 {
