@@ -147,7 +147,8 @@ def getwithdrawals(accountId):
 
 # Get the total inflow btwn (startDay - windowSize) and startDay
 # Also returns the total number of transactions
-def getTotalInflow(adeposits, startDay, windowSize):
+# If weekday = {0,1,2,3,4,5,6} , include only days that match that day of week (sunday = 0)
+def getTotalIntake(adeposits, startDay, windowSize, weekday = None):
 
 	intake = 0.0
 	count = 0.0
@@ -157,41 +158,30 @@ def getTotalInflow(adeposits, startDay, windowSize):
 	for deposit in adeposits:
 		# if date is less than windowSize days before current day
 		if startDay - timedelta(days=windowSize) <= deposit[1] and deposit[1] <= startDay:
-			intake += deposit[3]
-			count += 1
+			if weekday == None or weekday == deposit[1].weekday()
+				intake += deposit[3]
+				count += 1
 
 	if intake == 0.0:
 		return 0.0, 0.0
 
 	return intake, count
+	
+
 
 
 # Get the total outflow btwn (startDay - windowSize) and startDay
 # Also returns the total number of transactions
-def getTotalOutflow(awithdrawals, startDay, windowSize):
-
-	outflow = 0.0
-	count = 0.0
-
-	sorted(awithdrawals, key=lambda x: x[1], reverse=True)
-	for withdrawal in awithdrawals:
-		# if date is less than windowSize days before current day
-		if startDay - timedelta(days=windowSize) <= withdrawal[1] and withdrawal[1] <= startDay:
-			outflow += withdrawal[3]
-			count += 1
-	
-	if outflow == 0.0:
-		return 0.0, 0.0
-
-	return outflow, count
+def getTotalOutflow(awithdrawals, startDay, windowSize, weekday = None):
+	return getTotalIntake(awithdrawls, startDay, windowSize, weekday)
 
 
 # Get the total income btwn (startDay - windowSize) and startDay
 # Also returns the total number of transactions
-def getTotalIncome(adeposits, awithdrawals, startDay, windowSize):
-	inflow, incount = getTotalInflow(adeposits, startDay, windowSize)
-	outflow, outcount = getTotalOutflow(awithdrawals, startDay, windowSize)
-	return inflow - outflow
+def getTotalIncome(adeposits, awithdrawals, startDay, windowSize, weekday = None):
+	intake, incount = getTotalIntake(adeposits, startDay, windowSize, weekday)
+	outflow, outcount = getTotalOutflow(awithdrawals, startDay, windowSize, weekday)
+	return intake - outflow
 
 
 # Create a graph from startday to today
@@ -210,7 +200,7 @@ def plot_cashflow(adeposits, awithdrawals, startDay, incrementSize, windowSize):
 	for x in xcoord:
 		
 		if adeposits != None and awithdrawals == None:
-			v, _ = getTotalInflow(adeposits, x, windowSize)
+			v, _ = getTotalIntake(adeposits, x, windowSize)
 		elif awithdrawals != None and adeposits == None:
 			v, _ = getTotalOutflow(awithdrawals, x, windowSize)
 		elif awithdrawals != None and adeposits != None:
@@ -237,7 +227,19 @@ def plot_cashflow(adeposits, awithdrawals, startDay, incrementSize, windowSize):
 	plt.show()
 
 	
+def plot_dayofweek(adeposits, awithdrawals, startDay):
+	labels = ['SUN', 'MON', 'TUE', 'WED', 'THR', 'FRI', 'SAT']
+	sizes = [15, 30, 45, 10]
+	explode = (0, 0.1, 0, 0)  # only "explode" the 2nd slice (i.e. 'Hogs')
 
+	fig1, ax1 = plt.subplots()
+	ax1.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%',
+			shadow=True, startangle=90)
+	ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+
+	plt.show()
+		
+	
 		
 
 if __name__ == '__main__':
