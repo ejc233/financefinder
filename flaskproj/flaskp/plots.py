@@ -48,8 +48,8 @@ def main():
 	
 	print depositlist[aids]
 	
-	plot_cashflow(depositlist[aidc], None, datetime(2017, 5, 1, 0, 0), 2, 2)
-	plot_dayofweek(depositlist[aidc], None, datetime(2017, 5, 1, 0, 0))
+	plot_cashflow(depositlist['all'], None, datetime(2017, 5, 1, 0, 0), 2, 2)
+	plot_dayofweek(depositlist['all'], None, datetime(2017, 5, 1, 0, 0))
 	return
 	
 
@@ -227,7 +227,7 @@ def plot_cashflow(adeposits, awithdrawals, startDay, incrementSize, windowSize):
 	datemax = datetime.now()
 	ax.set_xlim(datemin, datemax)
 
-	return plt
+	plt.show()
 
 
 def make_autopct(values):
@@ -269,7 +269,7 @@ def plot_dayofweek(adeposits, awithdrawals, startDay):
 	ax1.pie(sizes, labels=labels, autopct=make_autopct(sizes), shadow=False, startangle=90)
 	ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
 
-	return plt
+	plt.show()
 		
 	
 		
