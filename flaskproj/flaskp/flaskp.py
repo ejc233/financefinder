@@ -1,6 +1,6 @@
 import os
 import sqlite3
-from login_check import checkname, getaccounts
+from login_check import checkname, getaccounts, getdeposits
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 app = Flask(__name__) # create the application instance :)
 app.config.from_object(__name__) # load config from this file
@@ -38,6 +38,7 @@ def start():
 	return render_template('login.html')
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
+	session['flag'] = ""
 	error = None
 	if request.method == 'POST':
 		num = request.form['aid']
@@ -63,11 +64,50 @@ def show_landing():
 	credit=filter(lambda x: x[3] == 'Credit Card', getaccounts(session['num']))
 	db = get_db()
 	actions = db.execute('select action from actions')
+	
 	actlist = actions.fetchall()
-	#print (actlist)
+	print checking
+	print actlist
 	params = []
 	for x in actlist:
 		params.append(db.execute('select actionName, paramName from params where actionName = (?)', x).fetchall())
 	#print params
 	return render_template('landing.html', checking = checking, saving = saving, credit = credit, actlist = actlist, paramStruct = params)
-
+@app.route('/select')
+def select():
+	if request.form["Show deposits"]:
+		session.['flag'] = "Show deposits"
+		return redirect(url_for('show_landing'))
+	elif request.form["Show withdrawals"]:
+		session.['flag'] = "Show withdrawals"
+		return redirect(url_for('show_landing'))
+	elif request.form["Show all transactions"]:
+		session.['flag'] = "Show all transactions"
+		return redirect(url_for('show_landing'))
+	elif request.form["Average inflow"]:
+		session.['flag'] = "Average inflow"
+		return redirect(url_for('show_landing'))
+	elif request.form["Average outflow"]:
+		session.['flag'] = "Average outflow"
+		return redirect(url_for('show_landing'))
+	elif request.form["Daily average inflow"]:
+		session.['flag'] = "Daily average inflow"
+		return redirect(url_for('show_landing'))
+	elif request.form["Daily average outflow"]:
+		session.['flag'] = "Daily average outflow"
+		return redirect(url_for('show_landing'))
+	elif request.form["Daily average net"]:
+		session.['flag'] = "Daily average net"
+		return redirect(url_for('show_landing'))
+@app.route('/compute')
+def compute():
+		if request.method = 'POST':
+			sesion['flag']=True
+			acctlist=[]
+			for x in getaccounts(session['num']):
+				if request.form[x[0]]==0:
+					acctlist.append[x[0]]
+			if request.form["Show deposits"]:
+				retList = []
+				for x in acctlist:
+					retList.append(getdeposits(x))
