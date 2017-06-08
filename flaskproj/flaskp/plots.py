@@ -197,30 +197,35 @@ def plot_cashflow(adeposits, awithdrawals, startDay, incrementSize, windowSize):
 		xcoord.append(day)
 		day = day - timedelta(days=incrementSize)
 	
+	fig, ax = plt.subplots()
+	ax.set_xlabel('Date')
+
 	for x in xcoord:
 		
 		if adeposits != None and awithdrawals == None:
+			ax.set_title('Total Intake vs. Date')
+			ax.set_ylabel('Total Intake')
 			v, _ = getTotalIntake(adeposits, x, windowSize)
 		elif awithdrawals != None and adeposits == None:
+			ax.set_title('Total Outflow vs. Date')
+			ax.set_ylabel('Total Outflow')
 			v, _ = getTotalOutflow(awithdrawals, x, windowSize)
 		elif awithdrawals != None and adeposits != None:
+			ax.set_title('Total Income vs. Date')
+			ax.set_ylabel('Total Income')
 			v = getTotalIncome(adeposits, awithdrawals, startDay, windowSize)
 		
 		ycoord.append(v)
-
 	
-	fig, ax = plt.subplots()
 	ax.plot(xcoord, ycoord)	
 	
 	#years = mdates.YearLocator()   # every year
 	#months = mdates.MonthLocator()  # every month
 	#yearsFmt = mdates.DateFormatter('%Y')
 
-
 	datemin = startDay
 	datemax = datetime.now()
 	ax.set_xlim(datemin, datemax)
-
 
 	plt.show()
 
@@ -236,21 +241,24 @@ def plot_dayofweek(adeposits, awithdrawals, startDay):
 		xcoord.append(day)
 		day = day - timedelta(days=1)
 	
+	fig1, ax1 = plt.subplots()
 	for x in xcoord:
 		if adeposits != None and awithdrawals == None:
+			ax1.set_title('Pie Chart of Daily Total Intake')
 			for y in range(0,7):
 				v, _ = getTotalIntake(adeposits, x, 1, y)
 				sizes[y] += v
 		elif awithdrawals != None and adeposits == None:
+			ax1.set_title('Pie Chart of Daily Total Outflow')
 			for y in range(0,7):
 				v, _ = getTotalOutflow(awithdrawals, x, 1, y)
 				sizes[y] += v
 		elif awithdrawals != None and adeposits != None:
+			ax1.set_title('Pie Chart of Daily Total Income')
 			for y in range(0,7):
 				v, _ = getTotalIncome(adeposits, awithdrawals, x, 1, y)
 				sizes[y] += v
 
-	fig1, ax1 = plt.subplots()
 	ax1.pie(sizes, labels=labels, autopct='%1.1f%%', shadow=False, startangle=90)
 	ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
 
