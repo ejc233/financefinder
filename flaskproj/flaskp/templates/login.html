@@ -1,14 +1,14 @@
 <html><head>
   <meta charset="UTF-8">
   <title>Login Form</title>
-      <link rel="stylesheet" href="css/login.css">
+      <link rel=stylesheet href="{{ url_for('static', filename='login.css') }}">
 </head>
 
 <body>
 
     <div class="page">
         <div class="page-title">
-            <img src="Capital-one-logo.png" alt="Capital One" style="width:100%;">
+            <img src="{{ url_for('static', filename='Capital-one-logo.png') }}" alt="Capital One" style="width:100%;">
         </div>
 
     	<div class="login">
