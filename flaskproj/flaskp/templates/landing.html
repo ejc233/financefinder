@@ -107,11 +107,12 @@
 											<div class="select-wrapper">
 												<form method=post action="/select">
 													<select name="action-category" id="action-category">
-														<option value>Select...</option>
+														<option value="">Select...</option>
 									{% for item in actlist %}
 														<option value="{{ item }}">{{ item[0] }}</option>
 									{% endfor %}
 													</select>
+													<button class=button type=submit value=Submit>Submit</button>
 												</form>
 											</div>
 										</div>
@@ -120,7 +121,7 @@
 								{% for list in paramStruct %}
 									{% for tuple in list %}
 										{% if flag == tuple[0] %}
-											
+											<h1>test</h1>
 										{% endif %}
 									{% endfor %}
 								{% endfor %}
