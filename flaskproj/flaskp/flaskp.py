@@ -63,4 +63,12 @@ def show_landing():
 	checking = filter(lambda x: x == 'checking', getaccounts(session['num']))
 	saving=filter(lambda x: x == 'saving', getaccounts(session['num']))
 	credit=filter(lambda x: x == 'credit', getaccounts(session['num']))
-	return render_template('landing.html', checking = checking, saving = saving, credit = credit)
+	db = get_db()
+	actions = db.execute('select action from actions')
+	actlist = actions.fetchall()
+	#print (actlist)
+	params = []
+	for x in actlist:
+		params.append(db.execute('select actionName, paramName from params where actionName = (?)', x).fetchall())
+	#print params
+	return render_template('landing.html', checking = checking, saving = saving, credit = credit, actlist = actlist, paramStruct = params)
