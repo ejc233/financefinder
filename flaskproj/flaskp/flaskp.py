@@ -78,7 +78,7 @@ def show_landing():
 		params.append(db.execute('select actionName, paramName from params where actionName = (?)', x).fetchall())
 	#print params
 	return render_template('landing.html', checking = checking, saving = saving, credit = credit, actlist = actlist, paramStruct = params)
-@app.route('/select')
+@app.route('/select', methods = ['POST'])
 def select():
 	if request.form["Show deposits"]:
 		session['flag'] = "Show deposits"
