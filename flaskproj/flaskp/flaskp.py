@@ -100,7 +100,7 @@ def select():
 	elif request.form["Daily average net"]:
 		session['flag'] = "Daily average net"
 		return redirect(url_for('show_landing'))
-@app.route('/compute', methods = [POST])
+@app.route('/compute', methods = ['POST'])
 def compute():
 		if request.method == 'POST':
 			sesion['flag']=True
@@ -127,4 +127,3 @@ def compute():
 					retList.append(getwithdrawals(x))
 				session['data'] = retList
 				redirect(url_for('show_landing'))
-
