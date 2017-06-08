@@ -19,7 +19,7 @@
 				<!-- Header -->
 				<div id="background">
 					<header id="header" class="alt">
-						<span class="logo"><img src="{{ url_for('static', filename='Capital-one-logo.png') }}" alt="Capital One" /></span>
+						<span class="logo"><img src="{{ url_for('static', filename='Capital-one-logo.png') }}" alt="Capital One">
 						<h1>Finance Finder</h1>
 						<p>Organize your accounts and financial information.</p>
 					</header>
@@ -110,12 +110,12 @@
 								{% for list in aclist %}
 									{% for item in list %}
 													<option value="{{ item }}">Something</option>
+									{% endfor %}
+								{% endfor %}
 												</select>
 											</div>
 										</div>
 									</div>
-									{% endfor %}
-								{% endfor %}
 							</header>
 						</form>
 						{% block datastuff %}{% endblock %}
@@ -124,22 +124,22 @@
 
 
 				<!-- Footer -->
-					<footer id="footer">
-						<section>
-							<h2>Projected Winners</h2>
-							<dl class="alt">
-								<dt>Winner</dt>
-								<dd>Ben Nichols</dd>
-								<dt>Winner</dt>
-								<dd>Erik Chan</dd>
-								<dt>Winner</dt>
-								<dd>Peter Ballen</dd>
-								<dt>Winner</dt>
-								<dd>Robby Marshall</dd>
-							</dl>
-						</section>
-						<p class="copyright">&copy; Projected Winners. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
-					</footer>
+				<footer id="footer">
+					<section>
+						<h2>Projected Winners</h2>
+						<dl class="alt">
+							<dt>Winner</dt>
+							<dd>Ben Nichols</dd>
+							<dt>Winner</dt>
+							<dd>Erik Chan</dd>
+							<dt>Winner</dt>
+							<dd>Peter Ballen</dd>
+							<dt>Winner</dt>
+							<dd>Robby Marshall</dd>
+						</dl>
+					</section>
+					<p class="copyright">&copy; Projected Winners. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+				</footer>
 
 			</div>
 	</body>
