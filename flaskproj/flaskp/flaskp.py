@@ -106,33 +106,7 @@ def select():
 		return redirect(url_for('show_landing'))
 @app.route('/compute', methods = ['POST'])
 def compute():
-<<<<<<< HEAD
-		if request.method == 'POST':
-			session['flag']=True
-			acctlist=[]
-			for x in getaccounts(session['num']):
-				if request.form[x[0]]==0:
-					acctlist.append[x[0]]
-			if request.form["Show deposits"]:
-				retList = []
-				for x in acctlist:
-					retList.append(getdeposits(x))
-				session['data'] = retList
-				redirect(url_for('show_landing'))
-			elif request.form["Show withdrawals"]:
-				retList = []
-				for x in acctlist:
-					retList.append(getwithdrawals(x))
-				session['data'] = retList
-				redirect(url_for('show_landing'))
-			elif request.form["Show all transactions"]:
-				retList = []
-				for x in acctlist:
-					retList.append(getdeposits(x))
-					retList.append(getwithdrawals(x))
-				session['data'] = retList
-				redirect(url_for('show_landing'))
-=======
+		
 	if request.method == 'POST':
 		session['flag']=True
 		acctlist=[]
@@ -174,5 +148,4 @@ def compute():
     		response.mimetype = 'image/png'
     		session['data'] = response
 
-			redirect(url_for('show_landing'))
->>>>>>> b8855db4ca4a677d3d79d56d7c13170b5117601d
+		redirect(url_for('show_landing'))
