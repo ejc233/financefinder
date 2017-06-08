@@ -103,7 +103,7 @@ def select():
 @app.route('/compute', methods = ['POST'])
 def compute():
 		if request.method == 'POST':
-			sesion['flag']=True
+			session['flag']=True
 			acctlist=[]
 			for x in getaccounts(session['num']):
 				if request.form[x[0]]==0:
