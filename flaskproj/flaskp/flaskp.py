@@ -58,9 +58,9 @@ def login():
 
 @app.route('/landing')
 def show_landing():
-	checking = filter(lambda x[3]: x == 'checking', getaccounts(session['num']))
-	saving=filter(lambda x[3]: x == 'saving', getaccounts(session['num']))
-	credit=filter(lambda x[3]: x == 'credit', getaccounts(session['num']))
+	checking = filter(lambda x: x[3] == 'checking', getaccounts(session['num']))
+	saving=filter(lambda x: x[3] == 'saving', getaccounts(session['num']))
+	credit=filter(lambda x: x[3] == 'credit', getaccounts(session['num']))
 	db = get_db()
 	actions = db.execute('select action from actions')
 	actlist = actions.fetchall()
