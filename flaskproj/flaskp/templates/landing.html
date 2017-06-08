@@ -44,7 +44,7 @@
 									{% for account in checking %}
 										<tbody>
 											<tr>
-												<td><div class="6u 12u$(small)"><input type="checkbox" id="check{{ account }}" name="check{{ account }}"><label for="check{{ account }}"></td>
+												<td><div class="6u 12u$(small)"><input type="checkbox" id="{{ account[0] }}" name="{{ account[0] }}"><label for="{{ account[0] }}"></td>
 												<td>{{ account[1] }}</td>
 												<td>$ {{ account[4] }}</td>
 												<td>$ {{ account[2] }}</td>
@@ -67,7 +67,7 @@
 									{% for account in saving %}
 										<tbody>
 											<tr>
-												<td><div class="6u 12u$(small)"><input type="checkbox" id="saving{{ account }}" name="saving{{ account }}"><label for="saving{{ account }}"></td>											<td>{{ account[1] }}</td>
+												<td><div class="6u 12u$(small)"><input type="checkbox" id="{{ account[0] }}" name="{{ account[0] }}"><label for="{{ account[0] }}"></td>											<td>{{ account[1] }}</td>
 												<td>$ {{ account[4] }}</td>
 												<td>$ {{ account[2] }}</td>
 											</tr>
@@ -89,7 +89,7 @@
 									{% for account in credit %}
 										<tbody>
 											<tr>
-												<td><div class="6u 12u$(small)"><input type="checkbox" id="credit{{ account }}" name="credit{{ account }}"><label for="credit{{ account }}"></td>											<td>{{ account[1] }}</td>
+												<td><div class="6u 12u$(small)"><input type="checkbox" id="{{ account[0] }}" name="{{ account[0] }}"><label for="{{ account[0] }}"></td>											<td>{{ account[1] }}</td>
 												<td>$ {{ account[4] }}</td>
 												<td>$ {{ account[2] }}</td>
 											</tr>
@@ -105,18 +105,24 @@
 									<div class="row uniform">
 										<div class="12u$">
 											<div class="select-wrapper">
-												<select name="action-category" id="action-category">
-													<option value>Select...</option>
-								{% for item in actlist %}
-													<option value="{{ item }}">{{ item[0] }}</option>
-								{% endfor %}
-												</select>
+												<form method=post action="/select">
+													<select name="action-category" id="action-category">
+														<option value>Select...</option>
+									{% for item in actlist %}
+														<option value="{{ item }}">{{ item[0] }}</option>
+									{% endfor %}
+													</select>
+												</form>
 											</div>
 										</div>
 									</div>
 							</header>
+							{% if flag != "" %}
+							<header class=major>
+								<h1>Test</h1>
+							</header>
+							{% endif %}
 						</form>
-						{% block datastuff %}{% endblock %}
 					</section>
 				</main>
 
