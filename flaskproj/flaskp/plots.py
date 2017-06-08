@@ -229,6 +229,13 @@ def plot_cashflow(adeposits, awithdrawals, startDay, incrementSize, windowSize):
 
 	plt.show()
 
+
+def make_autopct(values):
+    def my_autopct(pct):
+        total = sum(values)
+        val = int(round(pct*total/100.0))
+        return '{v:d}'.format(v=val)
+    return my_autopct
 	
 def plot_dayofweek(adeposits, awithdrawals, startDay):
 	labels = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']
@@ -259,7 +266,7 @@ def plot_dayofweek(adeposits, awithdrawals, startDay):
 				v, _ = getTotalIncome(adeposits, awithdrawals, x, 1, y)
 				sizes[y] += v
 
-	ax1.pie(sizes, labels=labels, autopct='%1.1f%%', shadow=False, startangle=90)
+	ax1.pie(sizes, labels=labels, autopct=make_autopct(sizes), shadow=False, startangle=90)
 	ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
 
 	plt.show()
