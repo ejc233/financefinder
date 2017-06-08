@@ -1,7 +1,11 @@
 import os
 import sqlite3
 from login_check import checkname, getaccounts, getdeposits
-from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
+from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, make_response
+import StringIO
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib.figure import Figure
+
 app = Flask(__name__) # create the application instance :)
 app.config.from_object(__name__) # load config from this file
 
@@ -102,29 +106,46 @@ def select():
 		return redirect(url_for('show_landing'))
 @app.route('/compute', methods = [POST])
 def compute():
-		if request.method == 'POST':
-			sesion['flag']=True
-			acctlist=[]
-			for x in getaccounts(session['num']):
-				if request.form[x[0]]==0:
-					acctlist.append[x[0]]
-			if request.form["Show deposits"]:
-				retList = []
-				for x in acctlist:
-					retList.append(getdeposits(x))
-				session['data'] = retList
-				redirect(url_for('show_landing'))
-			elif request.form["Show withdrawals"]:
-				retList = []
-				for x in acctlist:
-					retList.append(getwithdrawals(x))
-				session['data'] = retList
-				redirect(url_for('show_landing'))
-			elif request.form["Show all transactions"]:
-				retList = []
-				for x in acctlist:
-					retList.append(getdeposits(x))
-					retList.append(getwithdrawals(x))
-				session['data'] = retList
-				redirect(url_for('show_landing'))
+	if request.method == 'POST':
+		session['flag']=True
+		acctlist=[]
+		for x in getaccounts(session['num']):
+			if request.form[x[0]]==0:
+				acctlist.append[x[0]]
+
+		depositlist = []
+		withdrawallist = []
+		for accountid in acctlist:
+			depositlist += getdeposits(accountid)
+			withdrawallist += getwithdrawals(accountid)
+
+		if request.form["Show deposits"]:
+			retList = []
+			for x in acctlist:
+				retList.append(getdeposits(x))
+			session['data'] = retList
+			redirect(url_for('show_landing'))
+		elif request.form["Show withdrawals"]:
+			retList = []
+			for x in acctlist:
+				retList.append(getwithdrawals(x))
+			session['data'] = retList
+			redirect(url_for('show_landing'))
+		elif request.form["Show all transactions"]:
+			retList = []
+			for x in acctlist:
+				retList.append(getdeposits(x))
+				retList.append(getwithdrawals(x))
+			session['data'] = retList
+			redirect(url_for('show_landing'))
+		elif request.form["Average inflow"]:
+			fig = plot_cashflow(depositlist, None, request.form[x[1]], 1, 1)
+			canvas = FigureCanvas(fig)
+    		output = StringIO.StringIO()
+    		canvas.print_png(output)
+    		response = make_response(output.getvalue())
+    		response.mimetype = 'image/png'
+    		session['data'] = response
+
+			redirect(url_for('show_landing'))
 
