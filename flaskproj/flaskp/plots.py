@@ -6,7 +6,7 @@ import json
 import datetime
 import matplotlib
 import numpy as np
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt; plt.rcdefaults()
 import matplotlib.dates as mdates
 import matplotlib.cbook as cbook
 
@@ -248,26 +248,30 @@ def plot_dayofweek(adeposits, awithdrawals, startDay):
 		xcoord.append(day)
 		day = day - timedelta(days=1)
 	
-	fig1, ax1 = plt.subplots()
 	for x in xcoord:
 		if adeposits != None and awithdrawals == None:
-			ax1.set_title('Pie Chart of Daily Total Intake')
+			plt.title('Pie Chart of Daily Total Intake')
+			plt.ylabel('Daily Total Intake')
 			for y in range(0,7):
 				v, _ = getTotalIntake(adeposits, x, 1, y)
 				sizes[y] += v
 		elif awithdrawals != None and adeposits == None:
-			ax1.set_title('Pie Chart of Daily Total Outflow')
+			plt.title('Pie Chart of Daily Total Outflow')
+			plt.ylabel('Daily Total Outflow')
 			for y in range(0,7):
 				v, _ = getTotalOutflow(awithdrawals, x, 1, y)
 				sizes[y] += v
 		elif awithdrawals != None and adeposits != None:
-			ax1.set_title('Pie Chart of Daily Total Income')
+			plt.title('Pie Chart of Daily Total Income')
+			plt.ylabel('Daily Total Income')
 			for y in range(0,7):
 				v, _ = getTotalIncome(adeposits, awithdrawals, x, 1, y)
 				sizes[y] += v
 
-	ax1.pie(sizes, labels=labels, autopct=make_autopct(sizes), shadow=False, startangle=90)
-	ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+	# ax1.pie(sizes, labels=labels, autopct=make_autopct(sizes), shadow=False, startangle=90)
+	plt.bar([0, 1, 2, 3, 4, 5, 6], sizes, align='center')
+	plt.xticks([0, 1, 2, 3, 4, 5, 6], labels)
+	# ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
 
 	plt.show()
 		
