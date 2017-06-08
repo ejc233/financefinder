@@ -50,6 +50,7 @@ def login():
 			session['num'] = num
 			session['last'] = last
 			session['zip'] = zipp
+			sesion['flag']=True
 			return redirect(url_for('show_landing'))
 		else:
 			error = checkname(num,first,last,zipp)[1]
@@ -64,7 +65,7 @@ def show_landing():
 	credit=filter(lambda x: x[3] == 'Credit Card', getaccounts(session['num']))
 	db = get_db()
 	actions = db.execute('select action from actions')
-	
+
 	actlist = actions.fetchall()
 	print checking
 	print actlist
@@ -76,32 +77,32 @@ def show_landing():
 @app.route('/select')
 def select():
 	if request.form["Show deposits"]:
-		session.['flag'] = "Show deposits"
+		session['flag'] = "Show deposits"
 		return redirect(url_for('show_landing'))
 	elif request.form["Show withdrawals"]:
-		session.['flag'] = "Show withdrawals"
+		session['flag'] = "Show withdrawals"
 		return redirect(url_for('show_landing'))
 	elif request.form["Show all transactions"]:
-		session.['flag'] = "Show all transactions"
+		session['flag'] = "Show all transactions"
 		return redirect(url_for('show_landing'))
 	elif request.form["Average inflow"]:
-		session.['flag'] = "Average inflow"
+		session['flag'] = "Average inflow"
 		return redirect(url_for('show_landing'))
 	elif request.form["Average outflow"]:
-		session.['flag'] = "Average outflow"
+		session['flag'] = "Average outflow"
 		return redirect(url_for('show_landing'))
 	elif request.form["Daily average inflow"]:
-		session.['flag'] = "Daily average inflow"
+		session['flag'] = "Daily average inflow"
 		return redirect(url_for('show_landing'))
 	elif request.form["Daily average outflow"]:
-		session.['flag'] = "Daily average outflow"
+		session['flag'] = "Daily average outflow"
 		return redirect(url_for('show_landing'))
 	elif request.form["Daily average net"]:
-		session.['flag'] = "Daily average net"
+		session['flag'] = "Daily average net"
 		return redirect(url_for('show_landing'))
 @app.route('/compute')
 def compute():
-		if request.method = 'POST':
+		if request.method == 'POST':
 			sesion['flag']=True
 			acctlist=[]
 			for x in getaccounts(session['num']):

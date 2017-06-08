@@ -116,12 +116,16 @@
 											</div>
 										</div>
 									</div>
-							</header>
 							{% if flag != "" %}
-							<header class=major>
-								<h1>Test</h1>
-							</header>
+								{% for list in paramStruct %}
+									{% for tuple in list %}
+										{% if flag == tuple[0] %}
+											
+										{% endif %}
+									{% endfor %}
+								{% endfor %}
 							{% endif %}
+							</header>
 						</form>
 					</section>
 				</main>
