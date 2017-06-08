@@ -28,7 +28,7 @@
 				<!-- Main -->
 				<main id="main" class="alt">
 					<section id="content" class="main">
-						<form method="post" action="{{ url_for('show_landing')}}">
+						<form method="post" action="/compute">
 							<header class=major>
 								<h1>Your Accounts</h1>
 								{% if checking %}
@@ -107,10 +107,8 @@
 											<div class="select-wrapper">
 												<select name="action-category" id="action-category">
 													<option value>Select...</option>
-								{% for list in aclist %}
-									{% for item in list %}
-													<option value="{{ item }}">Something</option>
-									{% endfor %}
+								{% for item in actlist %}
+													<option value="{{ item }}">{{ item[0] }}</option>
 								{% endfor %}
 												</select>
 											</div>
