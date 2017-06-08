@@ -50,7 +50,7 @@ def login():
 			session['num'] = num
 			session['last'] = last
 			session['zip'] = zipp
-			sesion['flag']=True
+			session['flag']=True
 			return redirect(url_for('show_landing'))
 		else:
 			error = checkname(num,first,last,zipp)[1]
@@ -100,7 +100,7 @@ def select():
 	elif request.form["Daily average net"]:
 		session['flag'] = "Daily average net"
 		return redirect(url_for('show_landing'))
-@app.route('/compute')
+@app.route('/compute', methods = [POST])
 def compute():
 		if request.method == 'POST':
 			sesion['flag']=True
@@ -112,3 +112,19 @@ def compute():
 				retList = []
 				for x in acctlist:
 					retList.append(getdeposits(x))
+				session['data'] = retList
+				redirect(url_for('show_landing'))
+			elif request.form["Show withdrawals"]:
+				retList = []
+				for x in acctlist:
+					retList.append(getwithdrawals(x))
+				session['data'] = retList
+				redirect(url_for('show_landing'))
+			elif request.form["Show all transactions"]:
+				retList = []
+				for x in acctlist:
+					retList.append(getdeposits(x))
+					retList.append(getwithdrawals(x))
+				session['data'] = retList
+				redirect(url_for('show_landing'))
+
