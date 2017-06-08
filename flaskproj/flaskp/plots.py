@@ -25,11 +25,11 @@ def main():
 	
  	print checkname(cid, first, last, zipcode)	
  	
- 	#List of tuples of the form (account id, nickname, rewards, type, balance)
+ 	# List of tuples of the form (account id, nickname, rewards, type, balance)
 	accountlist = getaccounts(cid)
 	
-	#Dictionaries - key is the account id and value is a list of tuples representing withdrawals/deposits
-	#	Each tuple is of the form (transaction id, date, status, amount)
+	# Dictionaries - key is the account id and value is a list of tuples representing withdrawals/deposits
+	# Each tuple is of the form (transaction id, date, status, amount)
 	withdrawallist = {}
 	depositlist = {}
 	
@@ -48,9 +48,9 @@ def main():
 	
 	print depositlist[aids]
 	
-	plot_cashflow(depositlist[aids], None, datetime(2017, 5, 1, 0, 0), 2, 2)
+	plot_cashflow(depositlist[aidc], None, datetime(2017, 5, 1, 0, 0), 2, 2)
+	plot_dayofweek(depositlist[aidc], None, datetime(2017, 5, 1, 0, 0))
 	return
-	
 	
 
 # checks whether customer information is correct
@@ -147,7 +147,7 @@ def getwithdrawals(accountId):
 
 # Get the total inflow btwn (startDay - windowSize) and startDay
 # Also returns the total number of transactions
-# If weekday = {0,1,2,3,4,5,6} , include only days that match that day of week (sunday = 0)
+# If weekday = {0,1,2,3,4,5,6}, include only days that match that day of week (monday = 0)
 def getTotalIntake(adeposits, startDay, windowSize, weekday = None):
 
 	intake = 0.0
@@ -158,7 +158,7 @@ def getTotalIntake(adeposits, startDay, windowSize, weekday = None):
 	for deposit in adeposits:
 		# if date is less than windowSize days before current day
 		if startDay - timedelta(days=windowSize) <= deposit[1] and deposit[1] <= startDay:
-			if weekday == None or weekday == deposit[1].weekday()
+			if weekday == None or weekday == deposit[1].weekday():
 				intake += deposit[3]
 				count += 1
 
@@ -197,44 +197,69 @@ def plot_cashflow(adeposits, awithdrawals, startDay, incrementSize, windowSize):
 		xcoord.append(day)
 		day = day - timedelta(days=incrementSize)
 	
+	fig, ax = plt.subplots()
+	ax.set_xlabel('Date')
+
 	for x in xcoord:
 		
 		if adeposits != None and awithdrawals == None:
+			ax.set_title('Total Intake vs. Date')
+			ax.set_ylabel('Total Intake')
 			v, _ = getTotalIntake(adeposits, x, windowSize)
 		elif awithdrawals != None and adeposits == None:
+			ax.set_title('Total Outflow vs. Date')
+			ax.set_ylabel('Total Outflow')
 			v, _ = getTotalOutflow(awithdrawals, x, windowSize)
 		elif awithdrawals != None and adeposits != None:
+			ax.set_title('Total Income vs. Date')
+			ax.set_ylabel('Total Income')
 			v = getTotalIncome(adeposits, awithdrawals, startDay, windowSize)
 		
 		ycoord.append(v)
-		
 	
-
-	
-	fig, ax = plt.subplots()
 	ax.plot(xcoord, ycoord)	
 	
 	#years = mdates.YearLocator()   # every year
 	#months = mdates.MonthLocator()  # every month
 	#yearsFmt = mdates.DateFormatter('%Y')
 
-
 	datemin = startDay
 	datemax = datetime.now()
 	ax.set_xlim(datemin, datemax)
-
 
 	plt.show()
 
 	
 def plot_dayofweek(adeposits, awithdrawals, startDay):
-	labels = ['SUN', 'MON', 'TUE', 'WED', 'THR', 'FRI', 'SAT']
-	sizes = [15, 30, 45, 10]
-	explode = (0, 0.1, 0, 0)  # only "explode" the 2nd slice (i.e. 'Hogs')
+	labels = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']
+	xcoord = []
+	sizes = [0, 0, 0, 0, 0, 0, 0]
 
+	day = datetime.now()
+
+	while day >= startDay:
+		xcoord.append(day)
+		day = day - timedelta(days=1)
+	
 	fig1, ax1 = plt.subplots()
-	ax1.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%',
-			shadow=True, startangle=90)
+	for x in xcoord:
+		if adeposits != None and awithdrawals == None:
+			ax1.set_title('Pie Chart of Daily Total Intake')
+			for y in range(0,7):
+				v, _ = getTotalIntake(adeposits, x, 1, y)
+				sizes[y] += v
+		elif awithdrawals != None and adeposits == None:
+			ax1.set_title('Pie Chart of Daily Total Outflow')
+			for y in range(0,7):
+				v, _ = getTotalOutflow(awithdrawals, x, 1, y)
+				sizes[y] += v
+		elif awithdrawals != None and adeposits != None:
+			ax1.set_title('Pie Chart of Daily Total Income')
+			for y in range(0,7):
+				v, _ = getTotalIncome(adeposits, awithdrawals, x, 1, y)
+				sizes[y] += v
+
+	ax1.pie(sizes, labels=labels, autopct='%1.1f%%', shadow=False, startangle=90)
 	ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
 
 	plt.show()

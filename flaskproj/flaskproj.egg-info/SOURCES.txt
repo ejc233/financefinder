@@ -2,6 +2,10 @@ MANIFEST.in
 flaskp/__init__.py
 flaskp/flaskp.py
 flaskp/login_check.py
+flaskp/static/.DS_Store
+flaskp/static/Capital-one-logo.png
+flaskp/static/landing.css
+flaskp/static/login.css
 flaskp/templates/landing.html
 flaskp/templates/login.html
 flaskproj.egg-info/PKG-INFO
