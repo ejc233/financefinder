@@ -3,6 +3,9 @@ from flask import Flask, request, session, g, redirect, url_for, abort, render_t
 app = Flask(__name__) # create the application instance :)
 app.config.from_object(__name__) # load config from this file
 app.config.from_envvar('FLASKHACK_SETTINGS', silent=True)
+@app.route('/')
+def start():
+	return render_template('login.html')
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
 	if request.method == 'POST':
@@ -19,6 +22,7 @@ def login():
 		else:
 			error = checkname(num,first,last,zipp)[1]
 			return render_template('login.html', error=error)
+
 
 @app.route('/landing')
 def show_landing():
