@@ -1,5 +1,9 @@
+MANIFEST.in
 flaskp/__init__.py
 flaskp/flaskp.py
+flaskp/login_check.py
+flaskp/templates/landing.html
+flaskp/templates/login.html
 flaskproj.egg-info/PKG-INFO
 flaskproj.egg-info/SOURCES.txt
 flaskproj.egg-info/dependency_links.txt

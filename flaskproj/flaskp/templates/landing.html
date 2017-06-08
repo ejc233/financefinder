@@ -9,7 +9,7 @@
 	<head>
 		<title>Main Page</title>
 		<meta charset="utf-8" />
-		<link rel="stylesheet" href="css/landing.css" />
+		<link rel=stylesheet href="{{ url_for('static', filename='landing.css') }}">
 	</head>
 	<body>
 
@@ -19,7 +19,7 @@
 				<!-- Header -->
 				<div id="background">
 					<header id="header" class="alt">
-						<span class="logo"><img src="Capital-one-logo.png" alt="Capital One" /></span>
+						<span class="logo"><img src="{{ url_for('static', filename='Capital-one-logo.png') }}" alt="Capital One" /></span>
 						<h1>Finance Finder</h1>
 						<p>Organize your accounts and financial information.</p>
 					</header>
@@ -29,7 +29,7 @@
 				<main id="main" class="alt">
 					<section id="content" class="main">
 						<h1>Your Accounts</h1>
-						{% if checking.size > 0 %}
+						{% if checking %}
 						<h2>Checking Accounts</h2>
 						{% endif %}
 						<hr>

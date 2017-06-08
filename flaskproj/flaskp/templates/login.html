@@ -1,14 +1,14 @@
 <html><head>
   <meta charset="UTF-8">
   <title>Login Form</title>
-      <link rel="stylesheet" href="css/login.css">
+      <link rel=stylesheet href="{{ url_for('static', filename='login.css') }}">
 </head>
 
 <body>
 
     <div class="page">
         <div class="page-title">
-            <img src="Capital-one-logo.png" alt="Capital One" style="width:100%;">
+            <img src="{{ url_for('static', filename='Capital-one-logo.png') }}" alt="Capital One" style="width:100%;">
         </div>
 
     	<div class="login">
@@ -20,23 +20,23 @@
     			<div class="login-form">
                     <form action="{{ url_for('login')}}" method="post">
     				<div class="control-group">
-    				<input type="text" class="login-field" value="" placeholder="Account ID" id="account-id">
-    				<label class="login-field-icon fui-user" for="account-id"></label>
+    				<input type="text" class="login-field" value="" placeholder="Account ID" id="aid" name="aid">
+    				<label class="login-field-icon fui-user" for="aid"></label>
     				</div>
 
                     <div class="control-group">
-                    <input type="text" class="login-field" value="" placeholder="First Name" id="first-name">
-                    <label class="login-field-icon fui-user" for="first-name"></label>
+                    <input type="text" class="login-field" value="" placeholder="First Name" id="first" name="first">
+                    <label class="login-field-icon fui-user" for="first"></label>
                     </div>
 
                     <div class="control-group">
-                    <input type="text" class="login-field" value="" placeholder="Last Name" id="last-name">
-                    <label class="login-field-icon fui-user" for="last-name"></label>
+                    <input type="text" class="login-field" value="" placeholder="Last Name" id="last" name="last">
+                    <label class="login-field-icon fui-user" for="last"></label>
                     </div>
 
                     <div class="control-group">
-                    <input type="text" class="login-field" value="" placeholder="Zip Code" id="zip-code">
-                    <label class="login-field-icon fui-user" for="zip-code"></label>
+                    <input type="text" class="login-field" value="" placeholder="Zip Code" id="zip" name="zip">
+                    <label class="login-field-icon fui-user" for="zip"></label>
                     </div>
 
     				<div class="btn btn-primary btn-large btn-block">
