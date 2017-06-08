@@ -28,20 +28,20 @@ def main():
  	#List of tuples of the form (account id, nickname, rewards, type, balance)
 	accountlist = getaccounts(cid)
 	
-	#Dictionaries - key is the account id and value is a list of tuples representing withdrawls/deposits
+	#Dictionaries - key is the account id and value is a list of tuples representing withdrawals/deposits
 	#	Each tuple is of the form (transaction id, date, status, amount)
-	withdrawllist = {}
+	withdrawallist = {}
 	depositlist = {}
 	
-	withdrawllist['all'] = []
+	withdrawallist['all'] = []
 	depositlist['all'] = []
 
 	for account in accountlist:
 		accountid = account[0]
-		withdrawllist[accountid] = getwithdrawals(accountid)
+		withdrawallist[accountid] = getwithdrawals(accountid)
 		depositlist[accountid] = getdeposits(accountid)
 		
-		withdrawllist['all'] = withdrawllist['all'] + withdrawllist[accountid]
+		withdrawallist['all'] = withdrawallist['all'] + withdrawallist[accountid]
 		depositlist['all'] = depositlist['all'] + depositlist[accountid]
 		
 		print 'account', accountid, ' is a ', account[3], 'account'
@@ -188,16 +188,16 @@ def getTotalOutflow(awithdrawals, startDay, windowSize):
 
 # Get the total income btwn (startDay - windowSize) and startDay
 # Also returns the total number of transactions
-def getTotalIncome(adeposits, awithdrawls, startDay, windowSize):
+def getTotalIncome(adeposits, awithdrawals, startDay, windowSize):
 	inflow, incount = getTotalInflow(adeposits, startDay, windowSize)
-	outflow, outcount = getTotalOutflow(awithdrawls, startDay, windowSize)
+	outflow, outcount = getTotalOutflow(awithdrawals, startDay, windowSize)
 	return inflow - outflow
 
 
 # Create a graph from startday to today
 # Add a tickmark at every incrementSize number of days
 # At each tick, compute total inflow/outflow/income looking back windowSize number of days
-def plot_cashflow(adeposits, awithdrawls, startDay, incrementSize, windowSize):
+def plot_cashflow(adeposits, awithdrawals, startDay, incrementSize, windowSize):
 	day = datetime.now()
 		
 	xcoord = []
@@ -206,17 +206,15 @@ def plot_cashflow(adeposits, awithdrawls, startDay, incrementSize, windowSize):
 	while day >= startDay:
 		xcoord.append(day)
 		day = day - timedelta(days=incrementSize)
-
-	xcoord.append(datetime.now())
 	
 	for x in xcoord:
 		
-		if adeposits != None and awithdrawls == None:
+		if adeposits != None and awithdrawals == None:
 			v, _ = getTotalInflow(adeposits, x, windowSize)
-		elif awithdrawls != None and adeposits == None:
-			v, _ = getTotalOutflow(awithdrawls, x, windowSize)
-		elif awithdrawls != None and adeposits != None:
-			v = getTotalIncome(adeposits, awithdrawls, startDay, windowSize)
+		elif awithdrawals != None and adeposits == None:
+			v, _ = getTotalOutflow(awithdrawals, x, windowSize)
+		elif awithdrawals != None and adeposits != None:
+			v = getTotalIncome(adeposits, awithdrawals, startDay, windowSize)
 		
 		ycoord.append(v)
 		
