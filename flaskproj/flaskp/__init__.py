@@ -1,0 +1,2 @@
+from .flaskp import app
+
