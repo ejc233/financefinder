@@ -28,12 +28,79 @@
 				<!-- Main -->
 				<main id="main" class="alt">
 					<section id="content" class="main">
-						<h1>Your Accounts</h1>
-						{% if checking %}
-						<h2>Checking Accounts</h2>
-						{% endif %}
-						<hr>
-						<h1>Advanced Options</h1>
+						<header class=major>
+							<form method="post" action="{{ url_for('show_landing')}}">
+							<h1>Your Accounts</h1>
+							{% if checking %}
+							<h2>Checking Accounts</h2>
+							<div class="table-wrapper">
+								<table class="alt">
+									<thead><tr>
+										<th></th>
+										<th>Account Nickname</th>
+										<th>Account Balance</th>
+										<th>Account Rewards</th>
+									</tr></thead>
+								{% for account in checking %}
+									<tbody>
+										<tr>
+											<td><div class="6u 12u$(small)"><input type="checkbox" id="check{{ account }}" name="check{{ account }}"><label for="check{{ account }}"></td>
+											<td>{{ account[1] }}</td>
+											<td>$ {{ account[4] }}</td>
+											<td>$ {{ account[2] }}</td>
+										</tr>
+									</tbody>
+								{% endfor %}
+								</table>
+							</div>
+							{% endif %}
+							{% if saving %}
+							<h2>Savings Accounts</h2>
+							<div class="table-wrapper">
+								<table class="alt">
+									<thead><tr>
+										<th></th>
+										<th>Account Nickname</th>
+										<th>Account Balance</th>
+										<th>Account Rewards</th>
+									</tr></thead>
+								{% for account in saving %}
+									<tbody>
+										<tr>
+											<td><div class="6u 12u$(small)"><input type="checkbox" id="saving{{ account }}" name="saving{{ account }}"><label for="saving{{ account }}"></td>											<td>{{ account[1] }}</td>
+											<td>$ {{ account[4] }}</td>
+											<td>$ {{ account[2] }}</td>
+										</tr>
+									</tbody>
+								{% endfor %}
+								</table>
+							</div>
+							{% endif %}
+							{% if credit %}
+							<h2>Credit Card Accounts</h2>
+							<div class="table-wrapper">
+								<table class="alt">
+									<thead><tr>
+										<th></th>
+										<th>Account Nickname</th>
+										<th>Account Balance</th>
+										<th>Account Rewards</th>
+									</tr></thead>
+								{% for account in credit %}
+									<tbody>
+										<tr>
+											<td><div class="6u 12u$(small)"><input type="checkbox" id="credit{{ account }}" name="credit{{ account }}"><label for="credit{{ account }}"></td>											<td>{{ account[1] }}</td>
+											<td>$ {{ account[4] }}</td>
+											<td>$ {{ account[2] }}</td>
+										</tr>
+									</tbody>
+								{% endfor %}
+								</table>
+							</div>
+							{% endif %}
+							<hr>
+						</header>
+						<h1>Find...</h1>
 					</section>
 				</main>
 
